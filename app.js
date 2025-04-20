@@ -16,10 +16,21 @@ const userRequestsRoutes = require('./routes/UserrequestsRoutes'); // Import the
 connectToDb();
 
 // Middleware
+const allowedOrigins = [
+  'https://trawell-frontend.vercel.app',
+  'https://trawell-frontend-r9t4g5fvi-masterjayesh14s-projects.vercel.app'
+];
+
 app.use(cors({
-    origin: 'https://trawell-frontend-r9t4g5fvi-masterjayesh14s-projects.vercel.app', // Your frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-    credentials: true // Allow cookies and credentials
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
