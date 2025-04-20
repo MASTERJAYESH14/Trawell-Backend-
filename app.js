@@ -16,7 +16,11 @@ const userRequestsRoutes = require('./routes/UserrequestsRoutes'); // Import the
 connectToDb();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: 'https://trawell-frontend-r9t4g5fvi-masterjayesh14s-projects.vercel.app', // Your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+    credentials: true // Allow cookies and credentials
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
