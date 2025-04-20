@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const Location = require("../models/Location"); // Import the Location model
 
 // POST /api/locations - Save a new location
@@ -9,7 +10,7 @@ router.post("/locations", async (req, res) => {
 
     // Validate the request body
     if (!userId || !startLocation || !endLocation || !distanceInKm) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).json({ error: "Missing required fields: userId, startLocation, endLocation, and distanceInKm" });
     }
 
     // Create a new location document
@@ -35,6 +36,11 @@ router.post("/locations", async (req, res) => {
 router.get("/locations/:id", async (req, res) => {
   try {
     const { id } = req.params;
+
+    // Validate the ID format
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid location ID format" });
+    }
 
     // Find the location by ID
     const location = await Location.findById(id);
